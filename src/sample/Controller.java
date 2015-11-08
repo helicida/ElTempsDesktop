@@ -23,16 +23,25 @@ public class Controller {
 
     @FXML
     public ListView<String> listaTiempo;    // ListView donde se almacenan los datos de cada día
-    public int selectedItemIndex = 0;   // Posición del listView que está seleccionada
+    public ObservableList observableList = FXCollections.observableArrayList();
 
+    // Toolbar y cabecera
+    public int selectedItemIndex = 0;   // Posición del listView que está seleccionada
+    public Button refreshButton;   // Botón que refresca la lista
+    public Button buttonBack;   // Botón para volver al listView
     public ImageView previsionImagen;   // Imagen que muestra el estado del tiempo
     public Text textCiudad;             // Texto con el nombre de la ciudad
-    public ObservableList observableList = FXCollections.observableArrayList();
-    public Button refreshButton;   // Botón que refresca la lista
 
+    // Mostrables al clicar un item del listView
+    public ImageView listViewPrevision; // Imagen que se muestra al clicar un Item del listView
+    public Text listViewCiudad;         // Texto con el nombre de la ciudad que se muestra al clicar un Item del listView
+    public Text listViewText;   // Texto con información que se muestra al clicar un Item del listView
+    public Text listViewTemp;   // Texto con la temperatura que se muestra al clicar un Item del listView
+    
     public void initialize() throws IOException, SAXException, ParserConfigurationException {
 
       refreshButton.setGraphic(new ImageView("/img/refresh.png"));  //ruta de la imagen para el botón de actualizar
+      buttonBack.setGraphic(new ImageView("/img/back.png"));    //ruta de la imagen para el botón de ir atrás
       textCiudad.setText(parser.getNombreCiudad()); //asignamos el nombre de la ciudad
       parser.anadirInfoArrays();  //Llenamos el array con los datos
       setStageTitle(parser.getNombreCiudad());  // Y asginamos al nombre de la ventana la ciudad
@@ -45,10 +54,10 @@ public class Controller {
         Así, unicamente leyendo la previsión y añadiendole .png al final, ya sabe que imagen mostrar
         */
 
+        observableList.clear(); //Limpia la lista antes de escribir
+
         Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
         previsionImagen.setImage(icon); // la asigna al ImageView.
-
-        observableList.clear(); //Limpia la lista antes de escribir
 
         //Rellena una posición del observable list con la información del día
         for(int iterador = 0; iterador < parser.dias.size(); iterador++){
@@ -65,8 +74,34 @@ public class Controller {
 
             Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
             previsionImagen.setImage(icon); // la asigna al ImageView.
+            listViewPrevision.setImage(icon); // la asigna al ImageView oculto
+            listViewText.setText(observableList.get(selectedItemIndex).toString());
+            listViewCiudad.setText(parser.nombreCiudad);
+            listViewTemp.setText(parser.temperatura.get(selectedItemIndex));
 
+            // PROVISIONAL - Mostramos y ocultamos los objetos que nos interesan
+
+            listaTiempo.setVisible(false);
+            previsionImagen.setVisible(false);
+            listViewPrevision.setVisible(true);
+            listViewTemp.setVisible(true);
+            listViewCiudad.setVisible(true);
+            buttonBack.setVisible(true);
+            listViewText.setVisible(true);
         });
+    }
+
+    public void volverListView(ActionEvent actionEvent) {
+
+        // PROVISIONAL - Mostramos y ocultamos los objetos que nos interesan
+
+        previsionImagen.setVisible(true);
+        buttonBack.setVisible(false);
+        listViewText.setVisible(false);
+        listViewTemp.setVisible(false);
+        listViewCiudad.setVisible(false);
+        listViewPrevision.setVisible(false);
+        listaTiempo.setVisible(true);
     }
 
     public void about(ActionEvent actionEvent) {       //Ventana dialog
@@ -84,4 +119,6 @@ public class Controller {
     public void salirAplicacion(ActionEvent actionEvent) {
         Platform.exit();
     }
+
+
 }

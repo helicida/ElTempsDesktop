@@ -19,11 +19,9 @@ public class Main extends Application {
         stage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("OpenWeather Client");
-        primaryStage.setScene(new Scene(root, 330, 476));
+        primaryStage.setScene(new Scene(root, 424, 476));
         primaryStage.show();
     }
-
-
 
     public static void main(String[] args) {
         launch(args);

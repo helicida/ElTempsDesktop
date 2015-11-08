@@ -48,10 +48,10 @@ public class parser {
         for (int temp = 0; temp < nList.getLength(); temp++) {  //For con el que iteraremos a través de todos los elementos
             Element elementos = (Element) nList.item(temp);
             dias.add(elementos.getAttributes().getNamedItem("day").getNodeValue());
-            temperatura.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("day").getNodeValue());
-            temperaturaMin.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("min").getNodeValue());
-            temperaturaMax.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("max").getNodeValue());
             prevision.add(elementos.getElementsByTagName("clouds").item(0).getAttributes().getNamedItem("value").getNodeValue());
+            temperatura.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("day").getNodeValue() + "º");
+            temperaturaMin.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("min").getNodeValue() + "º");
+            temperaturaMax.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("max").getNodeValue() + "º");
         }
     }
 
