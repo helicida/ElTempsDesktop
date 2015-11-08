@@ -1,8 +1,10 @@
 package sample;
 
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import org.xml.sax.SAXException;
@@ -20,38 +22,51 @@ import javafx.scene.image.ImageView;
 public class Controller {
 
     @FXML
-    public ListView<String> listaTiempo;
+    public ListView<String> listaTiempo;    // ListView donde se almacenan los datos de cada día
+    public int selectedItemIndex = 0;   // Posición del listView que está seleccionada
 
-    public ImageView previsionImagen;
-    public Text textCiudad;
+    public ImageView previsionImagen;   // Imagen que muestra el estado del tiempo
+    public Text textCiudad;             // Texto con el nombre de la ciudad
     public ObservableList observableList = FXCollections.observableArrayList();
     public Button refreshButton;   // Botón que refresca la lista
 
     public void initialize() throws IOException, SAXException, ParserConfigurationException {
 
-       refreshButton.setGraphic(new ImageView("/img/refresh.png"));
-       //actualizarLista(null);  //Actualizamos la lista automaticamente al inicio
-
-      textCiudad.setText(parser.getNombreCiudad());
-      parser.anadirInfoArrays();
-      setStageTitle(parser.getNombreCiudad());
+      refreshButton.setGraphic(new ImageView("/img/refresh.png"));  //ruta de la imagen para el botón de actualizar
+      textCiudad.setText(parser.getNombreCiudad()); //asignamos el nombre de la ciudad
+      parser.anadirInfoArrays();  //Llenamos el array con los datos
+      setStageTitle(parser.getNombreCiudad());  // Y asginamos al nombre de la ventana la ciudad
     }
 
     public void actualizarLista(ActionEvent actionEvent) throws IOException, SAXException, ParserConfigurationException {
 
-        Image icon = new Image("/icons/" + parser.toPrevision(0) + ".png");
-        previsionImagen.setImage(icon);
+        /*Cada día tiene una previsión que puede ser "few clouds", "rain", "clear sky", etc, etc.
+        Lo que he hecho ha sido descargar las imagenes y cambiarle el nombre a cada una al estado que representa
+        Así, unicamente leyendo la previsión y añadiendole .png al final, ya sabe que imagen mostrar
+        */
 
-        //Leemos del XML con DOM
-            observableList.clear();
+        Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
+        previsionImagen.setImage(icon); // la asigna al ImageView.
 
-        //Para cada tem llama a la funcion toString para dar la informacion y la anadimos al ObservableList
+        observableList.clear(); //Limpia la lista antes de escribir
+
+        //Rellena una posición del observable list con la información del día
         for(int iterador = 0; iterador < parser.dias.size(); iterador++){
             observableList.add(parser.toString(iterador));
         }
+            listaTiempo.setItems(observableList); // Añadimos a la listView los items del observableList
+    }
 
-        //Seteamos el ListView con los Items del ObservableList
-            listaTiempo.setItems(observableList);
+    public void onChangeListView(){ //Cada vez que se haga click en el listView se ejcutará esto
+
+        listaTiempo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            selectedItemIndex = listaTiempo.getSelectionModel().getSelectedIndex(); //Sacamos el numero del índice que tenemos seleccionado
+
+            Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
+            previsionImagen.setImage(icon); // la asigna al ImageView.
+
+        });
     }
 
     public void about(ActionEvent actionEvent) {       //Ventana dialog
