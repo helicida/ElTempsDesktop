@@ -44,7 +44,6 @@ public class Controller {
       buttonBack.setGraphic(new ImageView("/img/back.png"));    //ruta de la imagen para el botón de ir atrás
       textCiudad.setText(parser.getNombreCiudad()); //asignamos el nombre de la ciudad
       parser.anadirInfoArrays();  //Llenamos el array con los datos
-      setStageTitle(parser.getNombreCiudad());  // Y asginamos al nombre de la ventana la ciudad
     }
 
     public void actualizarLista(ActionEvent actionEvent) throws IOException, SAXException, ParserConfigurationException {
@@ -54,8 +53,8 @@ public class Controller {
         Así, unicamente leyendo la previsión y añadiendole .png al final, ya sabe que imagen mostrar
         */
 
-        observableList.clear(); //Limpia la lista antes de escribir
-
+        setStageTitle(parser.getNombreCiudad());  // Y asginamos al nombre de la ventana la ciudad
+        
         Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
         previsionImagen.setImage(icon); // la asigna al ImageView.
 
