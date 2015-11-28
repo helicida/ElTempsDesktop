@@ -42,8 +42,8 @@ public class Controller {
     public MenuItem menuTresSemanas;
 
     // Para controlar un futuro dialog de estadisticas
-    private Dialog dialog;
-    private StatsController statsController;
+    // private Dialog dialog;
+    // private StatsController statsController;
 
     public void initialize() throws IOException, SAXException, ParserConfigurationException {
 
@@ -51,6 +51,7 @@ public class Controller {
       buttonBack.setGraphic(new ImageView("/img/back.png"));    //ruta de la imagen para el botón de ir atrás
       textCiudad.setText(Parser.getNombreCiudad()); //asignamos el nombre de la ciudad
       Parser.anadirInfoArrays();  //Llenamos el array con los datos
+
     }
 
     public void actualizarLista(ActionEvent actionEvent) throws IOException, SAXException, ParserConfigurationException {
@@ -60,9 +61,11 @@ public class Controller {
         Así, unicamente leyendo la previsión y añadiendole .png al final, ya sabe que imagen mostrar
         */
 
+
         observableList.clear(); //Limpia la lista antes de escribir
 
         Image icon = new Image("/icons/" + Parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
+
         previsionImagen.setImage(icon); // la asigna al ImageView.
 
         //Rellena una posición del observable list con la información del día
@@ -146,6 +149,8 @@ public class Controller {
         alert.showAndWait();
     }
 
+    /*
+
     public void mieDialogClick(ActionEvent actionEvent) {
         dialog.show();  // Mostrem el diàleg
     }
@@ -157,5 +162,7 @@ public class Controller {
     public void miDialegFXMLClick(ActionEvent actionEvent) {
         statsController.showDialogStage();
     }
+
+    */
 
 }
