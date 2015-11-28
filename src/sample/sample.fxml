@@ -38,6 +38,13 @@
                 <MenuItem mnemonicParsing="false" text="Cambiar ciudad" />
               </items>
             </Menu>
+            <Menu fx:id="Estadisticas" mnemonicParsing="false" text="Estadisticas">
+              <items>
+                <MenuItem fx:id="menuSemana" mnemonicParsing="false" onAction="#estadisticas" text="7 dias" />
+                  <MenuItem fx:id="menuDosSemanas" mnemonicParsing="false" onAction="#estadisticas" text="Dos semanas" />
+                  <MenuItem fx:id="menuTresSemanas" mnemonicParsing="false" onAction="#estadisticas" text="Tres semanas" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Ayuda">
             <items>
               <MenuItem fx:id="menuAbout" mnemonicParsing="false" onAction="#about" text="About" />

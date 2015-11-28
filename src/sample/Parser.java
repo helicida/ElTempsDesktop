@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * Created by sergi on 8/11/15.
  */
 
-public class parser {
+public class Parser {
 
     public static String nombreCiudad;
     public static ArrayList<String> dias = new ArrayList<>();
@@ -24,6 +25,7 @@ public class parser {
     public static ArrayList<String> temperaturaMax = new ArrayList();
     public static ArrayList<String> temperaturaMin = new ArrayList();
     public static ArrayList<String> prevision = new ArrayList();
+    public static ArrayList<String> humedad = new ArrayList();
     public static final File XML = new File("forecast.xml");
 
     public static String getNombreCiudad() throws ParserConfigurationException, IOException, SAXException {
@@ -49,6 +51,7 @@ public class parser {
             Element elementos = (Element) nList.item(temp);
             dias.add(elementos.getAttributes().getNamedItem("day").getNodeValue());
             prevision.add(elementos.getElementsByTagName("clouds").item(0).getAttributes().getNamedItem("value").getNodeValue());
+            humedad.add(elementos.getElementsByTagName("humidity").item(0).getAttributes().getNamedItem("value").getNodeValue() + "%");
             temperatura.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("day").getNodeValue() + "º");
             temperaturaMin.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("min").getNodeValue() + "º");
             temperaturaMax.add(elementos.getElementsByTagName("temperature").item(0).getAttributes().getNamedItem("max").getNodeValue() + "º");
@@ -58,9 +61,41 @@ public class parser {
     public static String toString(int pos) {
         return  "Dia = " + dias.get(pos) + "\n" +
                 "Previsión: " + prevision.get(pos) + "\n" +
+                "Humedad: " + humedad.get(pos) + "\n" +
                 "Temperatura = " + temperatura.get(pos) + "\n" +
                 "TemperaturaMax = " + temperaturaMax.get(pos) +"\n" +
                 "TemperaturaMin = " + temperaturaMin.get(pos);
+    }
+
+    public static String mitjana(int semanas){
+
+        DecimalFormat dosDecimales = new DecimalFormat("#.##");
+
+        semanas = semanas * 7;
+
+        double mediaTemperatura = 0;
+        double mediaHumedad = 0;
+        double mediaTemperaturaMax = 0;
+        double mediaTemperaturaMin = 0;
+
+        for(int iterador = 0; iterador < semanas; iterador++){
+            mediaTemperatura = mediaTemperatura + Double.parseDouble(temperatura.get(iterador).replace('º', ' '));
+            mediaHumedad = mediaHumedad + Double.parseDouble(humedad.get(iterador).replace('%', ' '));
+            mediaTemperaturaMax = mediaTemperaturaMax + Double.parseDouble(temperaturaMax.get(iterador).replace('º', ' '));
+            mediaTemperaturaMin = mediaTemperaturaMin + Double.parseDouble(temperaturaMin.get(iterador).replace('º', ' '));
+        }
+
+        mediaTemperatura = mediaTemperaturaMax / temperatura.size();
+        mediaHumedad = mediaHumedad / humedad.size();
+        mediaTemperaturaMax = mediaTemperaturaMax / temperaturaMax.size();
+        mediaTemperaturaMin = mediaTemperaturaMin / temperaturaMin.size();
+
+        return "Estadisticas: \n" +
+                "------------------------------- \n" +
+                "Temperatura = " + dosDecimales.format(mediaTemperatura) + " º \n" +
+                "Huemdad = " + dosDecimales.format(mediaHumedad) + " % \n" +
+                "TemperaturaMax = " + dosDecimales.format(mediaTemperaturaMax) + " º \n" +
+                "TemperaturaMin = " + dosDecimales.format(mediaTemperaturaMin) + " º";
     }
 
     public static String toPrevision(int pos){

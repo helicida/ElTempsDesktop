@@ -3,9 +3,9 @@ package sample;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,8 +14,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 
 
@@ -23,7 +21,7 @@ public class Controller {
 
     @FXML
     public ListView<String> listaTiempo;    // ListView donde se almacenan los datos de cada día
-    public ObservableList observableList = FXCollections.observableArrayList();
+    public ObservableList observableList = FXCollections.observableArrayList(); // Observable list para seguir la lista del tiempo
 
     // Toolbar y cabecera
     public int selectedItemIndex = 0;   // Posición del listView que está seleccionada
@@ -37,14 +35,22 @@ public class Controller {
     public Text listViewCiudad;         // Texto con el nombre de la ciudad que se muestra al clicar un Item del listView
     public Text listViewText;   // Texto con información que se muestra al clicar un Item del listView
     public Text listViewTemp;   // Texto con la temperatura que se muestra al clicar un Item del listView
-    
+
+    // Menus de los que hemos de saber de donde viene el evento
+    public MenuItem menuSemana;
+    public MenuItem menuDosSemanas;
+    public MenuItem menuTresSemanas;
+
+    // Para controlar un futuro dialog de estadisticas
+    private Dialog dialog;
+    private StatsController statsController;
+
     public void initialize() throws IOException, SAXException, ParserConfigurationException {
 
       refreshButton.setGraphic(new ImageView("/img/refresh.png"));  //ruta de la imagen para el botón de actualizar
       buttonBack.setGraphic(new ImageView("/img/back.png"));    //ruta de la imagen para el botón de ir atrás
-      textCiudad.setText(parser.getNombreCiudad()); //asignamos el nombre de la ciudad
-      parser.anadirInfoArrays();  //Llenamos el array con los datos
-      setStageTitle(parser.getNombreCiudad());  // Y asginamos al nombre de la ventana la ciudad
+      textCiudad.setText(Parser.getNombreCiudad()); //asignamos el nombre de la ciudad
+      Parser.anadirInfoArrays();  //Llenamos el array con los datos
     }
 
     public void actualizarLista(ActionEvent actionEvent) throws IOException, SAXException, ParserConfigurationException {
@@ -56,14 +62,16 @@ public class Controller {
 
         observableList.clear(); //Limpia la lista antes de escribir
 
-        Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
+        Image icon = new Image("/icons/" + Parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
         previsionImagen.setImage(icon); // la asigna al ImageView.
 
         //Rellena una posición del observable list con la información del día
-        for(int iterador = 0; iterador < parser.dias.size(); iterador++){
-            observableList.add(parser.toString(iterador));
+        for(int iterador = 0; iterador < Parser.dias.size(); iterador++){
+            observableList.add(Parser.toString(iterador));
         }
-            listaTiempo.setItems(observableList); // Añadimos a la listView los items del observableList
+
+        listaTiempo.setItems(observableList); // Añadimos a la listView los items del observableList
+        setStageTitle(Parser.nombreCiudad);  // Y asginamos al nombre de la ventana la ciudad
     }
 
     public void onChangeListView(){ //Cada vez que se haga click en el listView se ejcutará esto
@@ -72,12 +80,12 @@ public class Controller {
 
             selectedItemIndex = listaTiempo.getSelectionModel().getSelectedIndex(); //Sacamos el numero del índice que tenemos seleccionado
 
-            Image icon = new Image("/icons/" + parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
+            Image icon = new Image("/icons/" + Parser.toPrevision(selectedItemIndex) + ".png"); // ruta de la imagen de la previsión
             previsionImagen.setImage(icon); // la asigna al ImageView.
             listViewPrevision.setImage(icon); // la asigna al ImageView oculto
             listViewText.setText(observableList.get(selectedItemIndex).toString());
-            listViewCiudad.setText(parser.nombreCiudad);
-            listViewTemp.setText(parser.temperatura.get(selectedItemIndex));
+            listViewCiudad.setText(Parser.nombreCiudad);
+            listViewTemp.setText(Parser.temperatura.get(selectedItemIndex));
 
             // PROVISIONAL - Mostramos y ocultamos los objetos que nos interesan
 
@@ -120,5 +128,34 @@ public class Controller {
         Platform.exit();
     }
 
+    public void estadisticas(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Estadisticas | Weather Client v0.1");
+        alert.setHeaderText("Estadisticas");
+
+        if (actionEvent.getSource().equals(menuSemana)) {
+            alert.setContentText(Parser.mitjana(1));
+        }
+        else if (actionEvent.getSource().equals(menuDosSemanas)) {
+            alert.setContentText(Parser.mitjana(2));
+        }
+        else if (actionEvent.getSource().equals(menuTresSemanas)){
+            alert.setContentText(Parser.mitjana(3));
+        }
+
+        alert.showAndWait();
+    }
+
+    public void mieDialogClick(ActionEvent actionEvent) {
+        dialog.show();  // Mostrem el diàleg
+    }
+
+    public void setStatsController(StatsController statsController) {
+        this.statsController = statsController;
+    }
+
+    public void miDialegFXMLClick(ActionEvent actionEvent) {
+        statsController.showDialogStage();
+    }
 
 }
