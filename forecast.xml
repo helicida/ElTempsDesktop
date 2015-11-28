@@ -110,7 +110,7 @@
             <precipitation/>
             <windDirection deg="126" code="SE" name="SouthEast"/>
             <windSpeed mps="1.75" name="Light breeze"/>
-            <temperature day="13.75" min="13.18" max="17.75" night="16.29" eve="16.46" morn="14.18"/>
+            <temperature day="20.75" min="15.18" max="20.75" night="16.29" eve="16.46" morn="14.18"/>
             <pressure unit="hPa" value="1030.4"/>
             <humidity value="98" unit="%"/>
             <clouds value="few clouds" all="12" unit="%"/>
@@ -120,7 +120,7 @@
             <precipitation/>
             <windDirection deg="240" code="WSW" name="West-southwest"/>
             <windSpeed mps="2.26" name="Light breeze"/>
-            <temperature day="18.8" min="15.57" max="18.91" night="16.26" eve="17.29" morn="15.57"/>
+            <temperature day="19.8" min="15.48" max="20.91" night="16.26" eve="17.29" morn="15.57"/>
             <pressure unit="hPa" value="1033.14"/>
             <humidity value="92" unit="%"/>
             <clouds value="clear sky" all="0" unit="%"/>

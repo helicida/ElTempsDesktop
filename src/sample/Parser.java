@@ -85,10 +85,10 @@ public class Parser {
             mediaTemperaturaMin = mediaTemperaturaMin + Double.parseDouble(temperaturaMin.get(iterador).replace('º', ' '));
         }
 
-        mediaTemperatura = mediaTemperaturaMax / temperatura.size();
-        mediaHumedad = mediaHumedad / humedad.size();
-        mediaTemperaturaMax = mediaTemperaturaMax / temperaturaMax.size();
-        mediaTemperaturaMin = mediaTemperaturaMin / temperaturaMin.size();
+        mediaTemperatura = mediaTemperaturaMax / semanas;
+        mediaHumedad = mediaHumedad / semanas;
+        mediaTemperaturaMax = mediaTemperaturaMax / semanas;
+        mediaTemperaturaMin = mediaTemperaturaMin / semanas;
 
         return "Estadisticas: \n" +
                 "------------------------------- \n" +

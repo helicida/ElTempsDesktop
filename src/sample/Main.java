@@ -26,6 +26,8 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 424, 476));
         primaryStage.show();
 
+        /*
+
         // Load the fxml file and create a new stage for the popup
         FXMLLoader statsLoader = new FXMLLoader(getClass().getResource("stats.fxml"));
         Parent page = statsLoader.load();
@@ -34,8 +36,6 @@ public class Main extends Application {
         stats.initModality(Modality.WINDOW_MODAL);
         stats.initOwner(primaryStage);
         stats.setScene(new Scene(page));
-
-        /*
 
         // Guardem el dialogStage al controlador per poder accedir-hi i mostrar ña finestra
         ((StatsController)statsLoader.getController()).setDialogStage(stats);
